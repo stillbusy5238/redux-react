@@ -6,9 +6,10 @@ const User = model.getModel('user')
 const _filter = {'pwd':0,'__v':0}
 
 Router.get('/list',function(req,res){
+  const {type}= req.query
   // User.remove({},function(e,d){})
-  User.find({},function(err,doc){
-    return res.json(doc)
+  User.find({type},function(err,doc){
+    return res.json({code:0,data:doc})
   })
 
 })
@@ -20,6 +21,21 @@ Router.post('/login',function(req,res){
     }
     res.cookie('userid',doc._id)
     return res.json({code:0,data:doc})
+  })
+})
+//update接口
+Router.post('/update', function(req,res){
+  const userid = req.cookies.userid
+  if(!userid){
+    return res.json({code:1})
+  }
+  const body =req.body
+  User.findByIdAndUpdate(userid,body,function(err,doc){
+    const data = Object.assign({},{
+      user:doc.user,
+      type:doc.type
+    },body)
+    return res.json({code:0,data})
   })
 })
 

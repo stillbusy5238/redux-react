@@ -1,7 +1,7 @@
 import React from 'react'
 import {Redirect} from 'react-router-dom'
 import Logo from '../../component/logo/logo'
-import {List, InputItem,WingBlank,WhiteSpace,Button,Radio} from 'antd-mobile'
+import {List, InputItem,WhiteSpace,Button,Radio} from 'antd-mobile'
 import {connect} from 'react-redux'
 import {register} from '../../redux/user-redux'
 
@@ -52,13 +52,13 @@ class Register extends React.Component{
             <InputItem onChange={(v)=>{this.handleChange('repeatpwd',v)}} type="password">确认密码</InputItem>
             <WhiteSpace />
             <RadioItem
-              checked={this.state.type=='genuis'}
+              checked={this.state.type==='genuis'}
               onChange={()=>{this.handleChange('type','genuis')}}>
               求职
 
             </RadioItem>
             <RadioItem
-              checked={this.state.type=='boss'}
+              checked={this.state.type==='boss'}
               onChange={()=>{this.handleChange('type','boss')}}>
               Boss
 
