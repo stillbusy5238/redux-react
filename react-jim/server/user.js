@@ -3,7 +3,11 @@ const utils = require('utility')
 const Router = express.Router()
 const model = require('./model')
 const User = model.getModel('user')
+const Chat = model.getModel('chat')
 const _filter = {'pwd':0,'__v':0}
+// Chat.remove({},function(e,d){
+//
+// })
 
 Router.get('/list',function(req,res){
   const {type}= req.query
@@ -78,6 +82,17 @@ Router.get('/info',function(req,res){
     }
   })
 
+})
+//获取实时聊天
+Router.get('/getmsglist',function(req,res){
+  const user = req.cookies.user
+  // {'$or':[{from:user,to:user}]}
+  Chat.find({},function(err,doc){
+    if(!err){
+      return res.json({code:0,msgs:doc})
+    }
+
+  })
 })
 
 function md5Pwd(pwd){

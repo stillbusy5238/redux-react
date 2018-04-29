@@ -1,4 +1,7 @@
 import React from 'react'
+
+
+
 import {getUserList} from '../../redux/chatuser'
 import {connect} from 'react-redux'
 import UserCard from '../usercard/usercard'
@@ -9,13 +12,13 @@ import UserCard from '../usercard/usercard'
 )
 
 
-class Boss extends React.Component{
+class Genuis extends React.Component{
   // constructor(props){
   //   super(props);
   //
   // }
   componentDidMount(){
-    this.props.getUserList('genuis')
+    this.props.getUserList('boss')
 
 
 
@@ -24,7 +27,7 @@ class Boss extends React.Component{
 
 
     return (
-      <UserCard userList={this.props.userList}></UserCard>
+       <UserCard userList={this.props.userList}></UserCard>
 
 
     )
@@ -33,4 +36,4 @@ class Boss extends React.Component{
 
 }
 
-export default Boss
+export default Genuis

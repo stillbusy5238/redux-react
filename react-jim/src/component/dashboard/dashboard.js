@@ -4,18 +4,21 @@ import {NavBar} from 'antd-mobile'
 import {Switch,Route} from 'react-router-dom'
 import NavLinkBar from '../navlink/navlink'
 import Boss from '../../component/boss/boss'
+import Genuis from '../../component/genuis/genuis'
+
+import User from '../../component/user/user'
 
 
 
-function Genuis(){
-  return <h2>牛人</h2>
-}
+// function Genuis(){
+//   return <h2>牛人</h2>
+// }
 function Msg(){
   return <h2>Msg</h2>
 }
-function User(){
-  return <h2>个人中心</h2>
-}
+// function User(){
+//   return <h2>个人中心</h2>
+// }
 
 @connect(
   state=>state
