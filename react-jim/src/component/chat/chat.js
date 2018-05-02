@@ -1,11 +1,12 @@
 import React from 'react'
-import {List,InputItem,NavBar} from 'antd-mobile'
+import {List,InputItem,NavBar,Icon,Grid} from 'antd-mobile'
 import {connect} from 'react-redux'
 import {getMsgList,sendMsg,recvMsg} from '../../redux/chat-redux'
-import io from 'socket.io-client'
+// import io from 'socket.io-client'
+import {getChatId} from '../../util'
 
 
-const socket=io('ws://localhost:9093')
+// const socket=io('ws://localhost:9093')
 @connect(
   state=>state,
   {getMsgList,sendMsg,recvMsg}
@@ -16,53 +17,67 @@ class Chat extends React.Component{
     this.state={
       text:'',
       msg:[]
+
     }
   }
   componentDidMount(){
-    this.props.getMsgList()
-    this.props.recvMsg()
-    // socket.on('recvmsg',(data)=>{
-    //   // console.log(data);
-    //   this.setState({
-    //     msg:[...this.state.msg,data.text]
-    //   })
-    // })
+    if(!this.props.chat.chatmsg.length){
+      this.props.getMsgList()
+      this.props.recvMsg()
 
+    }
+    //修复grid的bug 手动修复
+    // setTimeout(function(){
+    //   window.dispatchEvent(new Event(‘resize’))
+    // },0)
 
   }
   handleSubmit(){
     const from = this.props.user._id
-    const to = this.props.match.params.user._id
+    const to = this.props.match.params.user
     const msg = this.state.text
     this.props.sendMsg({from,to,msg})
-    this.setState({text:''})
+    this.setState({text:'',showEmoji:false})
     // console.log(this.state);
     // socket.emit('sendmsg',{text:this.state.text})
     // this.setState({text:''})
 
   }
   render(){
+    const emoji = '😃 😁 🤔 😅 😉 😎 😗 😶 😛 🤑'.split(' ').filter(v=>v).map(v=>({text:v}))
 
-    const user = this.props.match.params.user
+    const userid = this.props.match.params.user
     const Item = List.Item
+    const users = this.props.chat.users
+    const chatid = getChatId(userid,this.props.user._id)
+    const chatmsgs = this.props.chat.chatmsg.filter(v=>v.chatid===chatid)
+    if(!users[userid]){
+      return null
+    }
 
     return(
       <div id='chat-page'>
-        <NavBar mode='dark'>
-          {this.props.match.params.user}
+        <NavBar mode='dark'
+          icon={<Icon type="left" />}
+          onLeftClick={
+            ()=>{this.props.history.goBack()}
+          }>
+          {users[userid].name}
         </NavBar>
-        {this.props.chat.chatmsg.map(v=>{
+        {chatmsgs.map(v=>{
+          const avatar = require(`../img/${users[v.from].avatar}.jpg`)
 
-          return v.from === user?(
-            <List key='v._id'>
+          return v.from === userid ? (
+            <List key={v._id}>
               <Item
-                
+                thumb={avatar}
+
                 >{v.content}</Item>
             </List>
 
           ):(
-            <List key='v._id'>
-              <Item className='chat-me' extra={'avatar'}>{v.content}</Item>
+            <List key={v._id}>
+              <Item className='chat-me' extra={<img src={avatar} alt=''/>}>{v.content}</Item>
             </List>
 
           )
@@ -74,10 +89,26 @@ class Chat extends React.Component{
               placeholder='请输入'
               value={this.state.text}
               onChange={v=>{this.setState({text:v})}}
-              extra={<span onClick={()=>this.handleSubmit()}>发送</span>}>
+              extra={
+                <div>
+                  <span style={{marginRight:15}}
+                        onClick={()=>{
+                          this.setState({
+                            showEmoji:!this.state.showEmoji
+                          })
+                        }}>😃</span>
+                  <span onClick={()=>this.handleSubmit()}>发送</span>
+                </div>
+              }>
 
               信息</InputItem>
           </List>
+          {this.state.showEmoji ? <Grid data={emoji} columnNum={5} onClick={el=>{
+            this.setState({
+              text:this.state.text+el.text
+            })
+          }}/>:null}
+
         </div>
 
       </div>
