@@ -8,15 +8,16 @@ import Genuis from '../../component/genuis/genuis'
 
 import User from '../../component/user/user'
 import {getMsgList,recvMsg} from '../../redux/chat-redux'
+import Msg from '../../component/msg/msg'
 
 
 
 // function Genuis(){
 //   return <h2>牛人</h2>
 // }
-function Msg(){
-  return <h2>Msg</h2>
-}
+// function Msg(){
+//   return <h2>Msg</h2>
+// }
 // function User(){
 //   return <h2>个人中心</h2>
 // }

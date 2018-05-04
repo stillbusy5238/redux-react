@@ -1,7 +1,7 @@
 
-
-const ADD_PEO = '加人'
-const REMOVE_PEO = '减人'
+// 
+// const ADD_PEO = '加人'
+// const REMOVE_PEO = '减人'
 
 //reducer
 //通过reducer建立

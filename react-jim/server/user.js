@@ -104,6 +104,21 @@ Router.get('/getmsglist',function(req,res){
   // {'$or':[{from:user,to:user}]}
 
 })
+//实时聊天未读数据
+Router.post('/readmsg',function(req,res){
+  const userid = req.cookies.userid
+  const {from}=req.body
+  // console.log(userid,from);
+  //严谨：'#set':{read:true}
+  //update默认修改1
+  Chat.update({from,to:userid},{read:true},{'multi':true},function(err,doc){
+    if(!err){
+      console.log(doc);
+      return res.json({code:0,num:doc.nModified})
+    }
+    return res.json({code:1,msg:'修改失败'})
+  })
+})
 
 function md5Pwd(pwd){
   const salt = 'jim_react_39234'
